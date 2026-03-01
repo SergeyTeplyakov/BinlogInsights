@@ -1,0 +1,17 @@
+<!-- This Directory.Build.props intentionally causes issues -->
+<Project>
+  <PropertyGroup>
+    <!-- Force warnings as errors so any warning becomes a build failure -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    
+    <!-- Override OutputPath to a location that doesn't make sense -->
+    <OutputPath>$(MSBuildThisFileDirectory)..\..\nonexistent\output\</OutputPath>
+    
+    <!-- Set an incorrect LangVersion -->
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+  
+  <!-- Import a file that doesn't exist — will be a NoImport in the binlog -->
+  <Import Project="Directory.Build.custom.props" Condition="Exists('Directory.Build.custom.props')" />
+  <Import Project="Packages.custom.props" Condition="Exists('Packages.custom.props')" />
+</Project>
