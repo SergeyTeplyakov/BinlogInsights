@@ -155,6 +155,20 @@ Copilot will:
 3. Check `expensive_analyzers` for slow Roslyn analyzers
 4. Identify bottleneck tasks with `expensive_tasks`
 
+> *"I have two binlogs from different build configurations. Compare them and tell me what's different."*
+
+Copilot will:
+1. Call `compare` to diff properties, per-project packages, and solution-wide packages
+2. Report property differences (e.g., `NuGetPackageRoot`, SDK paths)
+3. Show per-project package version mismatches
+4. List solution-wide package diffs — packages resolved to different versions across all projects
+5. Drill into specifics with `properties`, `items`, or `compiler` to explain *why* versions differ
+
+This is especially useful for:
+- **Migrating build systems** (e.g., CoreXT → stock MSBuild) — verify that the new build resolves the same packages
+- **Debugging CI vs local** — find property or package differences between environments
+- **Before/after changes** — confirm a `.props` or `.targets` change had the intended effect
+
 ## Architecture
 
 ```
