@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="BinlogInsights.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MSBuild.StructuredLogger" Version="2.3.113" />
   </ItemGroup>
 

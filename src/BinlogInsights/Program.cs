@@ -23,6 +23,12 @@ public static class Program
             return 0;
         }
 
+        // Compare command needs two binlog paths
+        if (command == "compare")
+        {
+            return RunCompare(args[1..]);
+        }
+
         if (args.Length < 2)
         {
             Console.Error.WriteLine("Error: binlog path is required.");
@@ -50,6 +56,7 @@ public static class Program
                 "nuget" => RunNuGet(build, args[2..]),
                 "preprocess" => RunPreprocess(build, args[2..]),
                 "compiler" => RunCompiler(build, args[2..]),
+                "projects" => RunProjects(build),
                 "search" => RunSearch(build, args[2..]),
                 _ => UnknownCommand(command),
             };
@@ -163,6 +170,13 @@ public static class Program
         return invocations.Count == 0 ? 2 : 0;
     }
 
+    private static int RunProjects(Build build)
+    {
+        var projects = ProjectsQuery.Execute(build);
+        Formatters.ProjectsFormatter.Print(projects);
+        return projects.Count == 0 ? 2 : 0;
+    }
+
     private static int RunSearch(Build build, string[] opts)
     {
         var query = GetOption(opts, "--query");
@@ -175,6 +189,47 @@ public static class Program
         var results = SearchQuery.Execute(build, query, projectFilter, limit, offset);
         Formatters.SearchFormatter.Print(results, query);
         return results.Count == 0 ? 2 : 0;
+    }
+
+    private static int RunCompare(string[] args)
+    {
+        if (args.Length < 2)
+        {
+            Console.Error.WriteLine("Error: compare requires two binlog paths.");
+            Console.Error.WriteLine("Usage: binlog-insights compare <binlogA> <binlogB> [--project <filter>]");
+            return 1;
+        }
+
+        var pathA = args[0];
+        var pathB = args[1];
+        var opts = args[2..];
+        var projectFilter = GetOption(opts, "--project");
+
+        try
+        {
+            var sw = Stopwatch.StartNew();
+            var buildA = BinlogAnalyzer.LoadBuild(pathA);
+            Console.Error.WriteLine($"[Loaded A in {sw.Elapsed.TotalSeconds:F1}s]");
+            sw.Restart();
+            var buildB = BinlogAnalyzer.LoadBuild(pathB);
+            Console.Error.WriteLine($"[Loaded B in {sw.Elapsed.TotalSeconds:F1}s]");
+
+            var result = CompareQuery.Execute(buildA, buildB, projectFilter);
+            var labelA = Path.GetFileNameWithoutExtension(pathA);
+            var labelB = Path.GetFileNameWithoutExtension(pathB);
+            Formatters.CompareFormatter.Print(result, labelA, labelB);
+            return 0;
+        }
+        catch (FileNotFoundException ex)
+        {
+            Console.Error.WriteLine($"Error: {ex.Message}");
+            return 1;
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error: {ex.Message}");
+            return 1;
+        }
     }
 
     private static int UnknownCommand(string command)
@@ -231,7 +286,9 @@ public static class Program
               nuget       NuGet restore diagnostics (packages, restore status, errors)
               preprocess  Show effective project XML with embedded source files
               compiler    Show compiler (csc/vbc) command-line invocations
+              projects    List all project files involved in the build
               search      Search all build messages by text
+              compare     Compare two binlogs side-by-side (properties, imports, references)
 
             Common options:
               --project <filter>  Filter by project path (substring match)
@@ -244,6 +301,7 @@ public static class Program
               items:      --type <itemType>       Item type (e.g. Compile, PackageReference)
               preprocess: --max-length <n>        Max output chars (default: 30000)
               search:     --query <text>          Search text (required)
+              compare:    <binlogA> <binlogB>    Two binlog files to compare
 
             Examples:
               binlog-insights overview msbuild.binlog
@@ -252,6 +310,7 @@ public static class Program
               binlog-insights properties msbuild.binlog --project MyApp --filter TargetFramework,OutputPath
               binlog-insights items msbuild.binlog --project MyApp --type PackageReference
               binlog-insights search msbuild.binlog --query "could not be found"
+              binlog-insights compare build1.binlog build2.binlog --project MyApp
             """);
     }
 }

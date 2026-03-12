@@ -1,6 +1,0 @@
-<Solution>
-  <Folder Name="/src/">
-    <Project Path="src/BinlogInsights.Core/BinlogInsights.Core.csproj" />
-    <Project Path="src/BinlogInsights/BinlogInsights.csproj" />
-  </Folder>
-</Solution>

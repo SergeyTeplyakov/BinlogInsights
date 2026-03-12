@@ -12,6 +12,8 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>binlog-insights</ToolCommandName>
     <PackageId>BinlogInsights</PackageId>
+    <Version>0.1.0</Version>
+    <Description>MSBuild binary log analysis tool for AI-assisted build debugging</Description>
   </PropertyGroup>
 
 </Project>

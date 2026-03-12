@@ -1,0 +1,162 @@
+<!-- Preprocessed: q:\src\Azure-Compute-Move\src\Services\NeMo\NetMgr\Common\Common.csproj -->
+
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Azure.Network</RootNamespace>
+    <AssemblyName>Microsoft.Azure.Network.Common</AssemblyName>
+    <TargetFrameworks>net472;net8.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <!-- Enabling PolySharp in order to use non-nullable attributes and other latest C# features -->
+    <EnablePolySharp>true</EnablePolySharp>
+    <EnableArtifactsPath>true</EnableArtifactsPath>
+    <PackageOutputPath>$(BinariesBuildTypeArchDirectory)\NuGetPackages</PackageOutputPath>
+    <AssemblyVersion>$(FileVersion)</AssemblyVersion>
+    <Title>$(MSBuildProjectName)</Title>
+    <Version>$(FileVersion)</Version>
+    <Authors>netgraph-dev</Authors>
+    <Company>Microsoft</Company>
+    <Description>The common util package for ANP service.</Description>
+    <ProjectUsageType>Production</ProjectUsageType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net472'">
+    <AssemblyOriginatorKeyFile>$(INETROOT)\src\Services\NeMo\NetMgr\Ngs\NgsAuthClient.Nuget\projects\microsoft.search.autopilot.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <PackageReference Include="System.ComponentModel.Annotations" />
+    <PackageReference Include="Newtonsoft.Json" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <ProjectReference Include="$(INETROOT)\src\Services\NeMo\NetMgr\NetCoreBridge\NetCoreBridge.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <InternalsVisibleTo Include="Common.UnitTests, PublicKey=0024000004800000940000000602000000240000525341310004000001000100659f68ac3442a475cbb8fd6f4de49b4740e5898d3abe0aa07afcbb6b17b191d117060d47722f608f0f575dafbcb9dabd0b6204cb3d62e6d2efddd676abd482d0e09e30d03aab07f0d46e0a81a5363cb2f4f6ec328a1c16c85ed54280432cab74aa7f941976dee29082e12424fe194d5a5dc01c66ff39eec6722a4bac75655baf" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' != 'net472'">
+    <InternalsVisibleTo Include="Common.UnitTests" />
+  </ItemGroup>
+</Project>
+
+<!-- === Import chain === -->
+<!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\Sdk\Sdk.props (from q:\src\Azure-Compute-Move\src\Services\NeMo\NetMgr\Common\Common.csproj line ) -->
+  <!-- [MISSING] Import: $(AlternateCommonProps) (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\Sdk\Sdk.props line 48) -->
+  <!-- Import: Q:\.tools\CxCache\.A\MsBuild.Corext.q6TjeLJhSAVLEIO6rAte2w\Extensions\Current\Microsoft.Common.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\Sdk\Sdk.props line 49) -->
+    <!-- [MISSING] Import: $(CustomBeforeDirectoryBuildProps) (from Q:\.tools\CxCache\.A\MsBuild.Corext.q6TjeLJhSAVLEIO6rAte2w\Extensions\Current\Microsoft.Common.props line 32) -->
+    <!-- Import: q:\src\Azure-Compute-Move\src\Services\NeMo\NetMgr\Directory.Build.props (from Q:\.tools\CxCache\.A\MsBuild.Corext.q6TjeLJhSAVLEIO6rAte2w\Extensions\Current\Microsoft.Common.props line 34) -->
+      <!-- Import: q:\src\Azure-Compute-Move\src\Services\NeMo\Directory.Build.props (from q:\src\Azure-Compute-Move\src\Services\NeMo\NetMgr\Directory.Build.props line 2) -->
+        <!-- Import: q:\src\Azure-Compute-Move\Directory.Build.props (from q:\src\Azure-Compute-Move\src\Services\NeMo\Directory.Build.props line 2) -->
+          <!-- Import: q:\src\Azure-Compute-Move\.config\Directory.Build.props (from q:\src\Azure-Compute-Move\Directory.Build.props line 5) -->
+            <!-- Import: Q:\src\Azure-Compute-Move\.config\props\UseCoreXTVarsInSDKProjects.props (from q:\src\Azure-Compute-Move\.config\Directory.Build.props line 50) -->
+            <!-- [MISSING] Import: $(EnlistmentRoot)\.corext\gen\packageList.props (from q:\src\Azure-Compute-Move\.config\Directory.Build.props line 57) -->
+            <!-- [MISSING] Import: $(EnlistmentRoot)\.corext\gen\packageList.targets (from q:\src\Azure-Compute-Move\.config\Directory.Build.props line 62) -->
+            <!-- Import: Q:\.tools\CxCache\MSBuild.Bridge.CoreXT.2.0.10\build\MSBuild.Bridge.CoreXT.props (from q:\src\Azure-Compute-Move\.config\Directory.Build.props line 65) -->
+              <!-- [MISSING] Import: $(MSBuildToolsPath32Original)\NuGet.targets (from Q:\.tools\CxCache\MSBuild.Bridge.CoreXT.2.0.10\build\MSBuild.Bridge.CoreXT.props line 93) -->
+              <!-- [MISSING] Import: $(MSBuildToolsPath32)\NuGet.targets (from Q:\.tools\CxCache\MSBuild.Bridge.CoreXT.2.0.10\build\MSBuild.Bridge.CoreXT.props line 94) -->
+            <!-- Import: q:\src\Azure-Compute-Move\.config\props\DefaultBuildFlavor.props (from q:\src\Azure-Compute-Move\.config\Directory.Build.props line 86) -->
+            <!-- [MISSING] Import: $(MSBuildThisFileDirectory)props\DefaultBuildFlavorRetailMsBuild.props (from q:\src\Azure-Compute-Move\.config\Directory.Build.props line 87) -->
+            <!-- Import: Q:\src\Azure-Compute-Move\.config\build.props (from q:\src\Azure-Compute-Move\.config\Directory.Build.props line 173) -->
+              <!-- Import: Q:\src\Azure-Compute-Move\.config\props\Build.props (from Q:\src\Azure-Compute-Move\.config\build.props line 2) -->
+                <!-- [MISSING] Import: $(INETROOT)\Directory.Build.props (from Q:\src\Azure-Compute-Move\.config\props\Build.props line 28) -->
+                <!-- [MISSING] Import: $(EnlistmentRoot)\__CloudBuildServiceProperties__\all.props (from Q:\src\Azure-Compute-Move\.config\props\Build.props line 31) -->
+                <!-- Import: Q:\src\Azure-Compute-Move\.config\props\ProjectConfigurations.props (from Q:\src\Azure-Compute-Move\.config\props\Build.props line 35) -->
+                <!-- Import: Q:\src\Azure-Compute-Move\.config\props\Default.Settings.props (from Q:\src\Azure-Compute-Move\.config\props\Build.props line 36) -->
+                <!-- Import: Q:\src\Azure-Compute-Move\.config\props\Native.Settings.props (from Q:\src\Azure-Compute-Move\.config\props\Build.props line 38) -->
+                <!-- [MISSING] Import: $(PkgKits)\build\native\Kits.props (from Q:\src\Azure-Compute-Move\.config\props\Build.props line 94) -->
+                <!-- Import: Q:\src\Azure-Compute-Move\build\Resharper\ReSharper.Targets (from Q:\src\Azure-Compute-Move\.config\props\Build.props line 443) -->
+                  <!-- Import: Q:\.tools\CxCache\ReSharper.CommandLineTools.CoreXT.1.5.9\build\ReSharper.MsBuild.Targets (from Q:\src\Azure-Compute-Move\build\Resharper\ReSharper.Targets line 9) -->
+                    <!-- [MISSING] Import: $(ReSharperCltPath)\InspectCode.MsBuild.Targets (from Q:\.tools\CxCache\ReSharper.CommandLineTools.CoreXT.1.5.9\build\ReSharper.MsBuild.Targets line 39) -->
+                <!-- Import: Q:\.tools\CxCache\ComponentOutputValidator.1.1.6\build\APServices.Common.Init.props (from Q:\src\Azure-Compute-Move\.config\props\Build.props line 451) -->
+                <!-- Import: Q:\src\Azure-Compute-Move\.config\props\PackageMacros.Arch.props (from Q:\src\Azure-Compute-Move\.config\props\Build.props line 457) -->
+            <!-- Import: q:\src\Azure-Compute-Move\.config\props\CentralizeArtifacts.props (from q:\src\Azure-Compute-Move\.config\Directory.Build.props line 178) -->
+            <!-- Import: Q:\.tools\CxCache\ComponentOutputValidator.1.1.6\build\APServices.Common.props (from q:\src\Azure-Compute-Move\.config\Directory.Build.props line 201) -->
+              <!-- Import: Q:\.tools\CxCache\ComponentOutputValidator.1.1.6\build\APServices.Common.targets (from Q:\.tools\CxCache\ComponentOutputValidator.1.1.6\build\APServices.Common.props line 30) -->
+            <!-- Import: Q:\.tools\CxCache\MsBuild.Corext.MigrationTools.1.0.3348.1710\build\MsBuild.Corext.MigrationTools.props (from q:\src\Azure-Compute-Move\.config\Directory.Build.props line 333) -->
+    <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\Sdk\UseArtifactsOutputPath.props (from Q:\.tools\CxCache\.A\MsBuild.Corext.q6TjeLJhSAVLEIO6rAte2w\Extensions\Current\Microsoft.Common.props line 36) -->
+      <!-- [MISSING] Import: $(MSBuildThisFileDirectory)..\targets\Microsoft.NET.DefaultArtifactsPath.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\Sdk\UseArtifactsOutputPath.props line 17) -->
+    <!-- [MISSING] Import: $(MSBuildProjectExtensionsPath)$(MSBuildProjectFile).*.props (from Q:\.tools\CxCache\.A\MsBuild.Corext.q6TjeLJhSAVLEIO6rAte2w\Extensions\Current\Microsoft.Common.props line 74) -->
+    <!-- [MISSING] Import: $(MSBuildUserExtensionsPath)\$(MSBuildToolsVersion)\Imports\Microsoft.Common.props\ImportBefore\* (from Q:\.tools\CxCache\.A\MsBuild.Corext.q6TjeLJhSAVLEIO6rAte2w\Extensions\Current\Microsoft.Common.props line 84) -->
+    <!-- [MISSING] Import: $(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Imports\Microsoft.Common.props\ImportBefore\* (from Q:\.tools\CxCache\.A\MsBuild.Corext.q6TjeLJhSAVLEIO6rAte2w\Extensions\Current\Microsoft.Common.props line 85) -->
+    <!-- [MISSING] Import: $(CustomBeforeMicrosoftCommonProps) (from Q:\.tools\CxCache\.A\MsBuild.Corext.q6TjeLJhSAVLEIO6rAte2w\Extensions\Current\Microsoft.Common.props line 92) -->
+    <!-- [MISSING] Import: Q:\.tools\CxCache\.A\MsBuild.Corext.q6TjeLJhSAVLEIO6rAte2w\Extensions\Current\Microsoft.VisualStudioVersion.v*.Common.props (from Q:\.tools\CxCache\.A\MsBuild.Corext.q6TjeLJhSAVLEIO6rAte2w\Extensions\Current\Microsoft.Common.props line 111) -->
+    <!-- [MISSING] Import: $(CustomAfterMicrosoftCommonProps) (from Q:\.tools\CxCache\.A\MsBuild.Corext.q6TjeLJhSAVLEIO6rAte2w\Extensions\Current\Microsoft.Common.props line 113) -->
+    <!-- [MISSING] Import: $(MSBuildUserExtensionsPath)\$(MSBuildToolsVersion)\Imports\Microsoft.Common.props\ImportAfter\* (from Q:\.tools\CxCache\.A\MsBuild.Corext.q6TjeLJhSAVLEIO6rAte2w\Extensions\Current\Microsoft.Common.props line 115) -->
+    <!-- [MISSING] Import: $(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Imports\Microsoft.Common.props\ImportAfter\* (from Q:\.tools\CxCache\.A\MsBuild.Corext.q6TjeLJhSAVLEIO6rAte2w\Extensions\Current\Microsoft.Common.props line 116) -->
+    <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\NuGet.props (from Q:\.tools\CxCache\.A\MsBuild.Corext.q6TjeLJhSAVLEIO6rAte2w\Extensions\Current\Microsoft.Common.props line 127) -->
+      <!-- Import: q:\src\Azure-Compute-Move\.config\packages.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\NuGet.props line 35) -->
+  <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\Sdk\Sdk.props line 50) -->
+    <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.DefaultItems.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.props line 144) -->
+      <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Microsoft.NETCoreSdk.BundledVersions.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.DefaultItems.props line 18) -->
+      <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Microsoft.NETCoreSdk.BundledMSBuildInformation.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.DefaultItems.props line 24) -->
+    <!-- [MISSING] Import: Microsoft.NET.Sdk.ImportWorkloads.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.props line 155) -->
+    <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.SupportedTargetFrameworks.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.props line 158) -->
+    <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.SupportedPlatforms.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.props line 161) -->
+    <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.WindowsSdkSupportedTargetPlatforms.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.props line 164) -->
+    <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.SourceLink.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.props line 166) -->
+      <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.Build.Tasks.Git\build\Microsoft.Build.Tasks.Git.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.SourceLink.props line 23) -->
+      <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.SourceLink.Common\build\Microsoft.SourceLink.Common.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.SourceLink.props line 24) -->
+      <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.SourceLink.GitHub\build\Microsoft.SourceLink.GitHub.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.SourceLink.props line 25) -->
+      <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.SourceLink.GitLab\build\Microsoft.SourceLink.GitLab.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.SourceLink.props line 26) -->
+      <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.SourceLink.AzureRepos.Git\build\Microsoft.SourceLink.AzureRepos.Git.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.SourceLink.props line 27) -->
+      <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.SourceLink.Bitbucket.Git\build\Microsoft.SourceLink.Bitbucket.Git.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.SourceLink.props line 28) -->
+    <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.CSharp.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.props line 168) -->
+    <!-- [MISSING] Import: $(MSBuildThisFileDirectory)Microsoft.NET.Sdk.VisualBasic.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.props line 169) -->
+    <!-- [MISSING] Import: $(MSBuildThisFileDirectory)Microsoft.NET.Sdk.FSharp.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.props line 170) -->
+    <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.PackTool.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.props line 172) -->
+    <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.PackProjectTool.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.props line 173) -->
+    <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk.WindowsDesktop\targets\Microsoft.NET.Sdk.WindowsDesktop.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.props line 175) -->
+      <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk.WindowsDesktop\targets\Microsoft.NET.Sdk.WindowsDesktop.WindowsForms.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk.WindowsDesktop\targets\Microsoft.NET.Sdk.WindowsDesktop.props line 174) -->
+        <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk.WindowsDesktop\targets\System.Windows.Forms.Analyzers.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk.WindowsDesktop\targets\Microsoft.NET.Sdk.WindowsDesktop.WindowsForms.props line 28) -->
+      <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk.WindowsDesktop\targets\Microsoft.NET.Sdk.WindowsDesktop.WPF.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk.WindowsDesktop\targets\Microsoft.NET.Sdk.WindowsDesktop.props line 176) -->
+    <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Windows.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.props line 176) -->
+    <!-- [MISSING] Import: $(AfterMicrosoftNetSdkProps) (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.props line 182) -->
+<!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\Sdk\Sdk.targets (from q:\src\Azure-Compute-Move\src\Services\NeMo\NetMgr\Common\Common.csproj line ) -->
+  <!-- [MISSING] Import: $(BeforeMicrosoftNETSdkTargets) (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\Sdk\Sdk.targets line 13) -->
+  <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.BeforeCommonCrossTargeting.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\Sdk\Sdk.targets line 20) -->
+    <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.DefaultAssemblyInfo.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.BeforeCommonCrossTargeting.targets line 24) -->
+    <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.DefaultOutputPaths.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.BeforeCommonCrossTargeting.targets line 25) -->
+      <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.DefaultArtifactsPath.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.DefaultOutputPaths.targets line 45) -->
+    <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.Workloads.CrossTargeting.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.BeforeCommonCrossTargeting.targets line 26) -->
+  <!-- [MISSING] Import: $(MSBuildThisFileDirectory)..\targets\Microsoft.NET.Sdk.BeforeCommon.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\Sdk\Sdk.targets line 22) -->
+  <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Microsoft.CSharp.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\Sdk\Sdk.targets line 38) -->
+    <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Microsoft.Managed.Before.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Microsoft.CSharp.targets line 32) -->
+    <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Microsoft.CSharp.CrossTargeting.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Microsoft.CSharp.targets line 34) -->
+      <!-- Import: Q:\.tools\CxCache\.A\MsBuild.Corext.q6TjeLJhSAVLEIO6rAte2w\Extensions\Microsoft\VisualStudio\Managed\Microsoft.CSharp.DesignTime.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Microsoft.CSharp.CrossTargeting.targets line 20) -->
+        <!-- Import: Q:\.tools\CxCache\.A\MsBuild.Corext.q6TjeLJhSAVLEIO6rAte2w\Extensions\Microsoft\VisualStudio\Managed\Microsoft.Managed.DesignTime.targets (from Q:\.tools\CxCache\.A\MsBuild.Corext.q6TjeLJhSAVLEIO6rAte2w\Extensions\Microsoft\VisualStudio\Managed\Microsoft.CSharp.DesignTime.targets line 10) -->
+      <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Microsoft.Common.CrossTargeting.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Microsoft.CSharp.CrossTargeting.targets line 22) -->
+        <!-- [MISSING] Import: $(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.CrossTargeting.targets\ImportBefore\*.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Microsoft.Common.CrossTargeting.targets line 19) -->
+        <!-- [MISSING] Import: $(MSBuildProjectFullPath).user (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Microsoft.Common.CrossTargeting.targets line 22) -->
+        <!-- [MISSING] Import: $(CustomBeforeMicrosoftCommonCrossTargetingTargets) (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Microsoft.Common.CrossTargeting.targets line 24) -->
+        <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\NuGet.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Microsoft.Common.CrossTargeting.targets line 204) -->
+          <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\NuGet.RestoreEx.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\NuGet.targets line 1578) -->
+        <!-- [MISSING] Import: $(CustomAfterMicrosoftCommonCrossTargetingTargets) (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Microsoft.Common.CrossTargeting.targets line 206) -->
+        <!-- [MISSING] Import: $(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.CrossTargeting.targets\ImportAfter\*.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Microsoft.Common.CrossTargeting.targets line 215) -->
+        <!-- [MISSING] Import: $(MSBuildProjectExtensionsPath)$(MSBuildProjectFile).*.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Microsoft.Common.CrossTargeting.targets line 240) -->
+        <!-- Import: q:\src\Azure-Compute-Move\src\Services\NeMo\NetMgr\Directory.Build.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Microsoft.Common.CrossTargeting.targets line 256) -->
+          <!-- Import: q:\src\Azure-Compute-Move\src\Services\NetCommon\StyleCop\StyleCop.props (from q:\src\Azure-Compute-Move\src\Services\NeMo\NetMgr\Directory.Build.targets line 35) -->
+          <!-- Import: q:\src\Azure-Compute-Move\Directory.Build.targets (from q:\src\Azure-Compute-Move\src\Services\NeMo\NetMgr\Directory.Build.targets line 36) -->
+            <!-- Import: q:\src\Azure-Compute-Move\.config\Directory.Build.targets (from q:\src\Azure-Compute-Move\Directory.Build.targets line 5) -->
+              <!-- Import: Q:\.tools\CxCache\MSBuild.Bridge.CoreXT.2.0.10\build\MSBuild.Bridge.CoreXT.targets (from q:\src\Azure-Compute-Move\.config\Directory.Build.targets line 5) -->
+                <!-- Import: Q:\.tools\CxCache\MSBuild.Bridge.CoreXT.2.0.10\build\MSBuild.Bridge.CoreXT.ReferenceAssemblies.props (from Q:\.tools\CxCache\MSBuild.Bridge.CoreXT.2.0.10\build\MSBuild.Bridge.CoreXT.targets line 7) -->
+              <!-- Import: q:\src\Azure-Compute-Move\.config\.targets\SetEnvironmentVariable.tasks (from q:\src\Azure-Compute-Move\.config\Directory.Build.targets line 8) -->
+              <!-- Import: q:\src\Azure-Compute-Move\.config\.targets\CentralizeArtifacts.targets (from q:\src\Azure-Compute-Move\.config\Directory.Build.targets line 143) -->
+              <!-- Import: Q:\.tools\CxCache\MsBuild.Corext.MigrationTools.1.0.3348.1710\build\MsBuild.Corext.MigrationTools.targets (from q:\src\Azure-Compute-Move\.config\Directory.Build.targets line 145) -->
+              <!-- [MISSING] Import: $(SlnGenPath)\SlnGen.targets (from q:\src\Azure-Compute-Move\.config\Directory.Build.targets line 146) -->
+              <!-- [MISSING] Import: $(PkgMicrosoft_CodeIndex_EnvVarDump)\build\Microsoft.CodeIndex.EnvVarDump.targets (from q:\src\Azure-Compute-Move\.config\Directory.Build.targets line 147) -->
+              <!-- Import: q:\src\Azure-Compute-Move\.config\.targets\NugetPackageVersioning.targets (from q:\src\Azure-Compute-Move\.config\Directory.Build.targets line 229) -->
+              <!-- Import: q:\src\Azure-Compute-Move\.config\.targets\BinaryCompatChecker.targets (from q:\src\Azure-Compute-Move\.config\Directory.Build.targets line 309) -->
+        <!-- [MISSING] Import: $(MSBuildToolsPath)\Microsoft.Common.Test.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Microsoft.Common.CrossTargeting.targets line 261) -->
+    <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Microsoft.Managed.After.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Microsoft.CSharp.targets line 36) -->
+  <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.CrossTargeting.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\Sdk\Sdk.targets line 40) -->
+    <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.Common.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.CrossTargeting.targets line 14) -->
+    <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.SourceLink.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.CrossTargeting.targets line 15) -->
+      <!-- [MISSING] Import: $(MSBuildThisFileDirectory)Microsoft.NET.Sdk.SourceLink.props (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.SourceLink.targets line 16) -->
+      <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.Build.Tasks.Git\build\Microsoft.Build.Tasks.Git.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.SourceLink.targets line 27) -->
+      <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.SourceLink.Common\buildMultiTargeting\Microsoft.SourceLink.Common.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.SourceLink.targets line 28) -->
+        <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.SourceLink.Common\build\InitializeSourceControlInformation.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.SourceLink.Common\buildMultiTargeting\Microsoft.SourceLink.Common.targets line 3) -->
+      <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.SourceLink.GitHub\build\Microsoft.SourceLink.GitHub.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.SourceLink.targets line 29) -->
+      <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.SourceLink.GitLab\build\Microsoft.SourceLink.GitLab.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.Sdk.SourceLink.targets line 30) -->
+      <!-- Import: Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuXOYX-K7MwfoA\sdk\10.0.103\Sdks\Microsoft.SourceLink.AzureRepos.Git\build\Microsoft.SourceLink.AzureRepos.Git.targets (from Q:\.tools\CxCache\.A\DotNetSDK.GBoeWYE_KuX
+
+[... truncated at 30000 chars. Full length: 32549. Use --max-length to increase.]
