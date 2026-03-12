@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>binlog-insights-mcp</ToolCommandName>
+    <PackageId>BinlogInsights.Mcp</PackageId>
+    <PackageType>McpServer</PackageType>
+    <Version>0.1.0</Version>
+    <Description>MCP server for MSBuild binary log analysis — AI-assisted build debugging</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include=".mcp\server.json" Pack="true" PackagePath="/.mcp/server.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BinlogInsights.Core\BinlogInsights.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ModelContextProtocol" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+  </ItemGroup>
+
+</Project>

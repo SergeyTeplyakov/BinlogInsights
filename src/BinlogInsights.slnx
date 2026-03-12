@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="BinlogInsights.Core/BinlogInsights.Core.csproj" />
   <Project Path="BinlogInsights/BinlogInsights.csproj" />
+  <Project Path="BinlogInsights.Mcp/BinlogInsights.Mcp.csproj" />
   <Project Path="BinlogInsights.Tests/BinlogInsights.Tests.csproj" />
 </Solution>

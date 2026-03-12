@@ -1,0 +1,9 @@
+{
+  "servers": {
+    "binlog-insights": {
+      "type": "stdio",
+      "command": "binlog-insights-mcp",
+      "args": []
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
+  "name": "binlog-insights-mcp",
+  "title": "Binlog Insights MCP Server",
+  "description": "MCP server for MSBuild binary log analysis — AI-assisted build debugging, performance profiling, and investigation.",
+  "packages": [
+    {
+      "registryType": "nuget",
+      "identifier": "BinlogInsights.Mcp",
+      "version": "0.1.0",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ],
+  "repository": {
+    "url": "https://github.com/ArtjomP/BinlogInsights",
+    "source": "github"
+  },
+  "version": "0.1.0"
+}
