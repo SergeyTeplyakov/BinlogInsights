@@ -10,11 +10,19 @@
     <PackageId>BinlogInsights.Mcp</PackageId>
     <PackageType>McpServer</PackageType>
     <Version>0.1.0</Version>
-    <Description>MCP server for MSBuild binary log analysis — AI-assisted build debugging</Description>
+    <Authors>Sergey Teplyakov</Authors>
+    <Description>MCP server for MSBuild binary log analysis — 26 tools for AI-assisted build investigation, performance analysis, and NuGet diagnostics.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/SergeyTeplyakov/BinlogInsights</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SergeyTeplyakov/BinlogInsights.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>msbuild;binlog;mcp;build-analysis;dotnet-tool</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
     <Content Include=".mcp\server.json" Pack="true" PackagePath="/.mcp/server.json" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="/" />
   </ItemGroup>
 
   <ItemGroup>

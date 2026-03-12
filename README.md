@@ -89,6 +89,37 @@ Add the MCP server to your workspace. Create `.vscode/mcp.json`:
 
 Once configured, Copilot Chat automatically gains access to all 26 binlog analysis tools.
 
+## Setting up your repo for the team
+
+The `samples/repo-setup/` directory contains ready-to-copy files. Drop them into your repo root:
+
+```
+your-repo/
+├── .vscode/
+│   └── mcp.json                          ← MCP server config
+├── .github/
+│   ├── instructions/
+│   │   └── build-investigation.instructions.md  ← auto-activates on build files
+│   └── prompts/
+│       ├── investigate-build-failure.prompt.md   ← one-click failure investigation
+│       ├── compare-builds.prompt.md              ← one-click build comparison
+│       └── analyze-build-performance.prompt.md   ← one-click perf analysis
+```
+
+**What each file does:**
+
+| File | Type | Trigger |
+|---|---|---|
+| `mcp.json` | MCP config | Automatic — VS Code starts the server on workspace open |
+| `build-investigation.instructions.md` | Instruction | Automatic — activates when you open any `.csproj`, `.sln`, `.props`, `.targets`, or `.binlog` file |
+| `investigate-build-failure.prompt.md` | Prompt | Manual — invoke from Copilot Chat prompt picker |
+| `compare-builds.prompt.md` | Prompt | Manual — invoke from Copilot Chat prompt picker |
+| `analyze-build-performance.prompt.md` | Prompt | Manual — invoke from Copilot Chat prompt picker |
+
+**Team members just need to:**
+1. Install the tool: `dotnet tool install -g BinlogInsights.Mcp`
+2. Open the repo in VS Code — everything else is automatic
+
 ## Usage
 
 ### Generate a binlog
