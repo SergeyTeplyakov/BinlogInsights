@@ -1,8 +1,16 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using BinlogInsights.Mcp;
 
 var builder = Host.CreateApplicationBuilder(args);
+
+// Redirect console logging to stderr so it doesn't corrupt the MCP JSON-RPC stdio transport.
+builder.Services.Configure<ConsoleLoggerOptions>(options =>
+{
+    options.LogToStandardErrorThreshold = LogLevel.Trace;
+});
 
 builder.Services.AddSingleton<BinlogCache>();
 
@@ -70,4 +78,20 @@ builder.Services.AddMcpServer(options =>
 .WithTools<ListFilesTool>()
 .WithTools<GetFileTool>();
 
-await builder.Build().RunAsync();
+var app = builder.Build();
+
+// Pre-load binlog(s) specified via --binlog <path> so the first tool call returns instantly.
+for (int i = 0; i < args.Length - 1; i++)
+{
+    if (args[i] is "--binlog" or "-b")
+    {
+        var path = args[i + 1];
+        if (File.Exists(path))
+        {
+            var cache = app.Services.GetRequiredService<BinlogCache>();
+            cache.Load(path);
+        }
+    }
+}
+
+await app.RunAsync();
