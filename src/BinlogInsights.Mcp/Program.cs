@@ -1,8 +1,16 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using BinlogInsights.Mcp;
 
 var builder = Host.CreateApplicationBuilder(args);
+
+// Redirect console logging to stderr so it doesn't corrupt the MCP JSON-RPC stdio transport.
+builder.Services.Configure<ConsoleLoggerOptions>(options =>
+{
+    options.LogToStandardErrorThreshold = LogLevel.Trace;
+});
 
 builder.Services.AddSingleton<BinlogCache>();
 
