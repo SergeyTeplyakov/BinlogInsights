@@ -78,4 +78,20 @@ builder.Services.AddMcpServer(options =>
 .WithTools<ListFilesTool>()
 .WithTools<GetFileTool>();
 
-await builder.Build().RunAsync();
+var app = builder.Build();
+
+// Pre-load binlog(s) specified via --binlog <path> so the first tool call returns instantly.
+for (int i = 0; i < args.Length - 1; i++)
+{
+    if (args[i] is "--binlog" or "-b")
+    {
+        var path = args[i + 1];
+        if (File.Exists(path))
+        {
+            var cache = app.Services.GetRequiredService<BinlogCache>();
+            cache.Load(path);
+        }
+    }
+}
+
+await app.RunAsync();
