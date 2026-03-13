@@ -100,10 +100,15 @@ your-repo/
 ├── .github/
 │   ├── instructions/
 │   │   └── build-investigation.instructions.md  ← auto-activates on build files
-│   └── prompts/
-│       ├── investigate-build-failure.prompt.md   ← one-click failure investigation
-│       ├── compare-builds.prompt.md              ← one-click build comparison
-│       └── analyze-build-performance.prompt.md   ← one-click perf analysis
+│   └── skills/
+│       ├── build-tool-setup/
+│       │   └── SKILL.md                  ← install/update the MCP tool
+│       ├── build-failure-analysis/
+│       │   └── SKILL.md                  ← error investigation
+│       ├── build-performance-analysis/
+│       │   └── SKILL.md                  ← perf bottleneck analysis
+│       └── build-comparison/
+│           └── SKILL.md                  ← diff two builds
 ```
 
 **What each file does:**
@@ -112,9 +117,12 @@ your-repo/
 |---|---|---|
 | `mcp.json` | MCP config | Automatic — VS Code starts the server on workspace open |
 | `build-investigation.instructions.md` | Instruction | Automatic — activates when you open any `.csproj`, `.sln`, `.props`, `.targets`, or `.binlog` file |
-| `investigate-build-failure.prompt.md` | Prompt | Manual — invoke from Copilot Chat prompt picker |
-| `compare-builds.prompt.md` | Prompt | Manual — invoke from Copilot Chat prompt picker |
-| `analyze-build-performance.prompt.md` | Prompt | Manual — invoke from Copilot Chat prompt picker |
+| `build-tool-setup/SKILL.md` | Skill | On-demand — Copilot loads when the tool isn't installed, install fails, or you need to update |
+| `build-failure-analysis/SKILL.md` | Skill | On-demand — Copilot loads when you ask about build errors, missing types, NuGet failures |
+| `build-performance-analysis/SKILL.md` | Skill | On-demand — Copilot loads when you ask about slow builds, build duration, expensive targets |
+| `build-comparison/SKILL.md` | Skill | On-demand — Copilot loads when you compare builds, diff environments, or migrate build systems |
+
+A `SKILL-TEMPLATE.md` is also included as a starting point for creating your own skills.
 
 **Team members just need to:**
 1. Install the tool: `dotnet tool install -g BinlogInsights.Mcp`
