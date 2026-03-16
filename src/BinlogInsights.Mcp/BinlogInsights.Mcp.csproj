@@ -9,8 +9,15 @@
     <ToolCommandName>binlog-insights-mcp</ToolCommandName>
     <PackageId>BinlogInsights.Mcp</PackageId>
     <PackageType>McpServer</PackageType>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <Authors>Sergey Teplyakov</Authors>
+    <PackageReleaseNotes>
+v0.2.0:
+- Added --binlog preload flag for faster repeated analysis
+- Fixed console logging to use stderr (no longer corrupts MCP JSON-RPC stdio transport)
+- Added build investigation skills and repo-setup templates
+- Added build comparison scenario and documentation
+    </PackageReleaseNotes>
     <Description>MCP server for MSBuild binary log analysis — 26 tools for AI-assisted build investigation, performance analysis, and NuGet diagnostics.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/SergeyTeplyakov/BinlogInsights</PackageProjectUrl>
