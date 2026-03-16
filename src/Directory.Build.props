@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <!-- Package version published to NuGet -->
+    <Version>0.2.0</Version>
+  </PropertyGroup>
+</Project>

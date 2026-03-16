@@ -16,7 +16,7 @@ builder.Services.AddSingleton<BinlogCache>();
 
 builder.Services.AddMcpServer(options =>
 {
-    options.ServerInfo = new() { Name = "binlog-insights", Version = "0.2.0" };
+    options.ServerInfo = new() { Name = "binlog-insights", Version = DeploymentUtilities.GetVersion() };
     options.ServerInstructions = """
         You are an MSBuild build investigation assistant. Use these tools to analyze .binlog files.
         

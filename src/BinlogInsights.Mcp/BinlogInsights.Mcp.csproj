@@ -9,7 +9,6 @@
     <ToolCommandName>binlog-insights-mcp</ToolCommandName>
     <PackageId>BinlogInsights.Mcp</PackageId>
     <PackageType>McpServer</PackageType>
-    <Version>0.2.0</Version>
     <Authors>Sergey Teplyakov</Authors>
     <PackageReleaseNotes>
 v0.2.0:
