@@ -87,6 +87,20 @@ Add the MCP server to your workspace. Create `.vscode/mcp.json`:
 }
 ```
 
+You can pre-load one or more binlogs at startup so tool calls return instantly:
+
+```json
+{
+  "servers": {
+    "binlog-insights": {
+      "type": "stdio",
+      "command": "binlog-insights-mcp",
+      "args": ["--binlog", "build.binlog", "--binlog", "other.binlog"]
+    }
+  }
+}
+```
+
 Once configured, Copilot Chat automatically gains access to all 26 binlog analysis tools.
 
 ## Setting up your repo for the team
