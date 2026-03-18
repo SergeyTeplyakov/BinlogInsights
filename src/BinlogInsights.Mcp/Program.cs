@@ -5,6 +5,13 @@ using Microsoft.Extensions.Logging.Console;
 using BinlogInsights.Mcp;
 using ModelContextProtocol.Protocol;
 
+// Handle --version flag before starting the MCP server.
+if (args.Contains("--version"))
+{
+    Console.WriteLine(DeploymentUtilities.GetVersion());
+    return;
+}
+
 var builder = Host.CreateApplicationBuilder(args);
 
 // Redirect console logging to stderr so it doesn't corrupt the MCP JSON-RPC stdio transport.
