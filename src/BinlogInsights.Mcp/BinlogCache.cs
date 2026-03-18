@@ -17,19 +17,48 @@ public class BinlogCache
     {
         var fullPath = Path.GetFullPath(binlogPath);
         var fileInfo = new FileInfo(fullPath);
-        var lastWrite = fileInfo.LastWriteTimeUtc;
-        var length = fileInfo.Length;
 
-        if (_cache.TryGetValue(fullPath, out var entry)
-            && entry.LastWriteTime == lastWrite
-            && entry.FileSize == length)
+        // Check existence before accessing file metadata.
+        // There is still a race between this check and the actual read,
+        // so we also catch IO exceptions below.
+        if (!fileInfo.Exists)
         {
-            return entry.Build;
+            _cache.TryRemove(fullPath, out _);
+            throw BinlogAnalysisException.FileNotFound(fullPath);
         }
 
-        var build = BinlogAnalyzer.LoadBuild(fullPath);
-        _cache[fullPath] = new CacheEntry(build, lastWrite, length);
-        return build;
+        try
+        {
+            var lastWrite = fileInfo.LastWriteTimeUtc;
+            var length = fileInfo.Length;
+
+            if (_cache.TryGetValue(fullPath, out var entry)
+                && entry.LastWriteTime == lastWrite
+                && entry.FileSize == length)
+            {
+                return entry.Build;
+            }
+
+            var build = BinlogAnalyzer.LoadBuild(fullPath);
+            _cache[fullPath] = new CacheEntry(build, lastWrite, length);
+            return build;
+        }
+        catch (FileNotFoundException)
+        {
+            // Race condition: file was deleted between the existence check and the read.
+            _cache.TryRemove(fullPath, out _);
+            throw BinlogAnalysisException.FileDeleted(fullPath);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            _cache.TryRemove(fullPath, out _);
+            throw BinlogAnalysisException.AccessDenied(fullPath, ex);
+        }
+        catch (IOException ex) when (ex is not FileNotFoundException)
+        {
+            _cache.TryRemove(fullPath, out _);
+            throw BinlogAnalysisException.IoError(fullPath, ex);
+        }
     }
 
     private sealed record CacheEntry(Build Build, DateTime LastWriteTime, long FileSize);

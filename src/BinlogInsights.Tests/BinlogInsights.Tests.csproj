@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BinlogInsights.Core\BinlogInsights.Core.csproj" />
+    <ProjectReference Include="..\BinlogInsights.Mcp\BinlogInsights.Mcp.csproj" />
   </ItemGroup>
 
 </Project>
