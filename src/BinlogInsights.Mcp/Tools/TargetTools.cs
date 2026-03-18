@@ -11,14 +11,31 @@ public class ExpensiveTargetsTool
     [McpServerTool(Name = "binlog_expensive_targets", Title = "Expensive Targets",
         ReadOnly = true, Idempotent = true)]
     [Description("Get the most expensive MSBuild targets across the build, aggregated by name and ordered by exclusive duration. Exclusive duration subtracts time spent in cross-project MSBuild/CallTarget calls.")]
-    public static IReadOnlyList<TargetExecutionData> Execute(
+    public static List<object> Execute(
         BinlogCache cache,
         [Description("Path to the .binlog file")] string binlog_file,
-        [Description("Maximum number of targets to return (default: 20)")] int limit = 20,
+        [Description("Maximum number of targets to return (default: 20)")] int top_number = 20,
         [Description("Number of results to skip for pagination (default: 0)")] int offset = 0)
     {
         var build = cache.Load(binlog_file);
-        return TargetPerformanceQuery.GetExpensiveTargets(build, limit, offset);
+        return TargetPerformanceQuery.GetExpensiveTargets(build, top_number, offset)
+            .Select(t => (object)new
+            {
+                name = t.TargetName,
+                duration = FormatDuration(t.TotalExclusiveMs, t.ExecutionCount),
+                executionCount = t.ExecutionCount,
+                totalExclusiveMs = t.TotalExclusiveMs,
+                totalInclusiveMs = t.TotalInclusiveMs,
+                minDurationMs = t.MinDurationMs,
+                maxDurationMs = t.MaxDurationMs,
+            })
+            .ToList();
+    }
+
+    private static string FormatDuration(long ms, int count)
+    {
+        var dur = ms >= 1000 ? $"{ms / 1000.0:F1}s" : $"{ms}ms";
+        return count > 1 ? $"{dur} (\u00d7{count})" : dur;
     }
 }
 

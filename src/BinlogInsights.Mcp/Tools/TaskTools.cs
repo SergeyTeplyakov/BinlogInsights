@@ -11,14 +11,31 @@ public class ExpensiveTasksTool
     [McpServerTool(Name = "binlog_expensive_tasks", Title = "Expensive Tasks",
         ReadOnly = true, Idempotent = true)]
     [Description("Get the most expensive MSBuild tasks across the build, aggregated by name. Shows total, min, max, and average duration.")]
-    public static IReadOnlyList<TaskExecutionData> Execute(
+    public static List<object> Execute(
         BinlogCache cache,
         [Description("Path to the .binlog file")] string binlog_file,
-        [Description("Maximum number of tasks to return (default: 20)")] int limit = 20,
+        [Description("Maximum number of tasks to return (default: 20)")] int top_number = 20,
         [Description("Number of results to skip for pagination (default: 0)")] int offset = 0)
     {
         var build = cache.Load(binlog_file);
-        return TaskPerformanceQuery.GetExpensiveTasks(build, limit, offset);
+        return TaskPerformanceQuery.GetExpensiveTasks(build, top_number, offset)
+            .Select(t => (object)new
+            {
+                name = t.TaskName,
+                duration = FormatDuration(t.TotalDurationMs, t.ExecutionCount),
+                executionCount = t.ExecutionCount,
+                totalDurationMs = t.TotalDurationMs,
+                minDurationMs = t.MinDurationMs,
+                maxDurationMs = t.MaxDurationMs,
+                avgDurationMs = t.AvgDurationMs,
+            })
+            .ToList();
+    }
+
+    private static string FormatDuration(long ms, int count)
+    {
+        var dur = ms >= 1000 ? $"{ms / 1000.0:F1}s" : $"{ms}ms";
+        return count > 1 ? $"{dur} (\u00d7{count})" : dur;
     }
 }
 
