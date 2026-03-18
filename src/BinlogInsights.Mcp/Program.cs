@@ -81,15 +81,31 @@ builder.Services.AddMcpServer(options =>
 var app = builder.Build();
 
 // Pre-load binlog(s) specified via --binlog <path> so the first tool call returns instantly.
-for (int i = 0; i < args.Length - 1; i++)
+var cache = app.Services.GetRequiredService<BinlogCache>();
+for (int i = 0; i < args.Length; i++)
 {
     if (args[i] is "--binlog" or "-b")
     {
-        var path = args[i + 1];
-        if (File.Exists(path))
+        if (i + 1 >= args.Length || args[i + 1].StartsWith('-'))
         {
-            var cache = app.Services.GetRequiredService<BinlogCache>();
+            Console.Error.WriteLine($"Warning: '{args[i]}' flag requires a path argument. Skipping.");
+            continue;
+        }
+
+        var path = args[++i];
+        if (!File.Exists(path))
+        {
+            Console.Error.WriteLine($"Warning: Binlog file not found: '{path}'. Skipping preload.");
+            continue;
+        }
+
+        try
+        {
             cache.Load(path);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Warning: Failed to preload binlog '{path}': {ex.Message}");
         }
     }
 }
