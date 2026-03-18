@@ -54,7 +54,7 @@ public class BinlogCache
             _cache.TryRemove(fullPath, out _);
             throw BinlogAnalysisException.AccessDenied(fullPath, ex);
         }
-        catch (IOException ex) when (ex is not FileNotFoundException)
+        catch (IOException ex)
         {
             _cache.TryRemove(fullPath, out _);
             throw BinlogAnalysisException.IoError(fullPath, ex);

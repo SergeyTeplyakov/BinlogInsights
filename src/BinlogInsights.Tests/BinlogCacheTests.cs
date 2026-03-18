@@ -68,17 +68,24 @@ public class BinlogCacheTests
         var cache = new BinlogCache();
         var tempFile = CopyToTemp(GetSampleBinlog());
 
-        // Load once to populate cache
-        var build = cache.Load(tempFile);
-        Assert.NotNull(build);
+        try
+        {
+            // Load once to populate cache
+            var build = cache.Load(tempFile);
+            Assert.NotNull(build);
 
-        // Delete the file
-        File.Delete(tempFile);
+            // Delete the file
+            File.Delete(tempFile);
 
-        // Should throw with a clear message, not return stale data
-        var ex = Assert.Throws<BinlogAnalysisException>(() => cache.Load(tempFile));
-        Assert.Contains(tempFile, ex.BinlogPath);
-        Assert.Contains("dotnet build /bl", ex.RecommendedAction);
+            // Should throw with a clear message, not return stale data
+            var ex = Assert.Throws<BinlogAnalysisException>(() => cache.Load(tempFile));
+            Assert.Equal(Path.GetFullPath(tempFile), ex.BinlogPath);
+            Assert.Contains("dotnet build /bl", ex.RecommendedAction);
+        }
+        finally
+        {
+            File.Delete(tempFile);
+        }
     }
 
     [Fact]
@@ -87,18 +94,25 @@ public class BinlogCacheTests
         var cache = new BinlogCache();
         var tempFile = CopyToTemp(GetSampleBinlog());
 
-        // Load, delete, then recreate
-        var build1 = cache.Load(tempFile);
-        File.Delete(tempFile);
+        try
+        {
+            // Load, delete, then recreate
+            var build1 = cache.Load(tempFile);
+            File.Delete(tempFile);
 
-        Assert.Throws<BinlogAnalysisException>(() => cache.Load(tempFile));
+            Assert.Throws<BinlogAnalysisException>(() => cache.Load(tempFile));
 
-        // Recreate the file
-        File.Copy(GetSampleBinlog(), tempFile);
-        var build2 = cache.Load(tempFile);
+            // Recreate the file
+            File.Copy(GetSampleBinlog(), tempFile);
+            var build2 = cache.Load(tempFile);
 
-        Assert.NotNull(build2);
-        // Should be a fresh load, not the old cached instance
-        Assert.NotSame(build1, build2);
+            Assert.NotNull(build2);
+            // Should be a fresh load, not the old cached instance
+            Assert.NotSame(build1, build2);
+        }
+        finally
+        {
+            File.Delete(tempFile);
+        }
     }
 }
