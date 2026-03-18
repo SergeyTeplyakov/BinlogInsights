@@ -2,5 +2,7 @@
   <PropertyGroup>
     <!-- Package version published to NuGet -->
     <Version>0.2.0</Version>
+    <!-- Append build timestamp so we can identify exactly which build is deployed -->
+    <InformationalVersion>$(Version)+$([System.DateTime]::UtcNow.ToString("yyyyMMddHHmmss"))</InformationalVersion>
   </PropertyGroup>
 </Project>

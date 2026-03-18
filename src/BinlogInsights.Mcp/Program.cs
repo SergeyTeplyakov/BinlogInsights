@@ -78,4 +78,68 @@ builder.Services.AddMcpServer(options =>
 .WithTools<ListFilesTool>()
 .WithTools<GetFileTool>();
 
-await builder.Build().RunAsync();
+var app = builder.Build();
+
+// Pre-load binlogs specified via --binlog <path> so tool calls return instantly.
+switch (GetBinlogArgs(args))
+{
+    case BinlogArgs.Specified(var binlogPaths):
+        var cache = app.Services.GetRequiredService<BinlogCache>();
+        foreach (var binlogPath in binlogPaths)
+        {
+            try
+            {
+                if (!File.Exists(binlogPath))
+                {
+                    Console.Error.WriteLine($"Warning: Binlog file not found: '{binlogPath}'. Skipping.");
+                    continue;
+                }
+                cache.Load(binlogPath);
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Warning: Failed to preload binlog '{binlogPath}': {ex.Message}");
+            }
+        }
+        break;
+
+    case BinlogArgs.Error(var message):
+        Console.Error.WriteLine($"Error: {message}");
+        break;
+}
+
+await app.RunAsync();
+
+static BinlogArgs GetBinlogArgs(string[] args)
+{
+    var paths = new List<string>();
+
+    for (int i = 0; i < args.Length; i++)
+    {
+        if (args[i] is not ("--binlog" or "-b"))
+            continue;
+
+        if (i + 1 >= args.Length || args[i + 1].StartsWith('-'))
+            return new BinlogArgs.Error("Please provide the path to the binlog. Usage: --binlog <path>");
+
+        paths.Add(Path.GetFullPath(args[i + 1]));
+        i++; // skip the path argument
+    }
+
+    if (paths.Count == 0)
+        return BinlogArgs.NotSpecified.Instance;
+
+    return new BinlogArgs.Specified(paths);
+}
+
+abstract record BinlogArgs
+{
+    public sealed record NotSpecified : BinlogArgs
+    {
+        public static readonly NotSpecified Instance = new();
+    }
+
+    public sealed record Specified(List<string> Paths) : BinlogArgs;
+
+    public sealed record Error(string Message) : BinlogArgs;
+}
