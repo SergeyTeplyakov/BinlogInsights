@@ -1,4 +1,4 @@
-using System.Text.RegularExpressions;
+using System.Globalization;
 using BinlogInsights.Core.Models;
 using Microsoft.Build.Logging.StructuredLogger;
 
@@ -8,13 +8,10 @@ namespace BinlogInsights.Core.Queries;
 
 public static class AnalyzerQuery
 {
-    private static readonly Regex TotalAnalyzerTimeRegex = new(
-        @"Total analyzer execution time:\s+[\d\.]+\s+seconds", RegexOptions.Compiled);
-    private static readonly Regex TotalGeneratorTimeRegex = new(
-        @"Total generator execution time:\s+[\d\.]+\s+seconds", RegexOptions.Compiled);
-
     /// <summary>
     /// Gets the most expensive Roslyn analyzers/generators across the entire build.
+    /// After BuildAnalyzer.AnalyzeBuild(), Csc tasks contain "Analyzer Report" and
+    /// "Generator Report" Folder nodes with structured TimedMessage children.
     /// </summary>
     public static IReadOnlyList<AggregatedAnalyzerData> GetExpensiveAnalyzers(
         Build build,
@@ -54,87 +51,53 @@ public static class AnalyzerQuery
     }
 
     /// <summary>
-    /// Extracts analyzer/generator data from a specific Csc task.
+    /// Extracts analyzer/generator data from a Csc task by reading the structured
+    /// "Analyzer Report" and "Generator Report" Folder nodes that BuildAnalyzer creates.
     /// </summary>
     public static CscAnalyzerData? ParseCscTask(MSBuildTask task)
     {
         if (!string.Equals(task.Name, "Csc", StringComparison.OrdinalIgnoreCase))
             return null;
 
-        var messages = task.Children.OfType<Message>()
-            .Select(m => m.Text)
-            .Where(t => t != null)
-            .Cast<string>()
-            .ToList();
-
         var analyzerAssemblies = new List<AssemblyAnalyzerData>();
         var generatorAssemblies = new List<AssemblyAnalyzerData>();
 
-        List<AssemblyAnalyzerData>? currentSection = null;
-        string? currentAssembly = null;
-        var currentAnalyzers = new List<AnalyzerInfo>();
-
-        foreach (var message in messages)
+        foreach (var folder in task.Children.OfType<Folder>())
         {
-            if (message.Contains("CompilerServer:"))
-                continue;
-
-            if (TotalAnalyzerTimeRegex.IsMatch(message))
+            var target = folder.Name switch
             {
-                currentSection = analyzerAssemblies;
-                currentAssembly = null;
-                continue;
-            }
+                "Analyzer Report" => analyzerAssemblies,
+                "Generator Report" => generatorAssemblies,
+                _ => null
+            };
 
-            if (TotalGeneratorTimeRegex.IsMatch(message))
+            if (target == null)
+                continue;
+
+            // Each assembly is a Folder child; skip TimedMessage headers (total time, column header).
+            foreach (var assemblyFolder in folder.Children.OfType<Folder>())
             {
-                SaveCurrentAssembly(currentSection, currentAssembly, currentAnalyzers);
-                currentSection = generatorAssemblies;
-                currentAssembly = null;
-                currentAnalyzers = [];
-                continue;
-            }
+                var parsed = ParseTimedLine(assemblyFolder.Name);
+                if (parsed.name == null)
+                    continue;
 
-            if (currentSection == null)
-                continue;
-
-            if (message.Contains(", Version="))
-            {
-                SaveCurrentAssembly(currentSection, currentAssembly, currentAnalyzers);
-                var parsed = ParseLine(message);
-                currentAssembly = parsed.name;
-                currentAnalyzers = [];
-                continue;
-            }
-
-            if (currentAssembly != null)
-            {
-                var parsed = ParseLine(message);
-                if (parsed.durationMs > 0 || !string.IsNullOrWhiteSpace(parsed.name))
+                var analyzers = new List<AnalyzerInfo>();
+                foreach (var entry in assemblyFolder.Children.OfType<TimedMessage>())
                 {
-                    currentAnalyzers.Add(new AnalyzerInfo(parsed.name, parsed.durationMs));
+                    var entryParsed = ParseTimedLine(entry.Text);
+                    if (entryParsed.name != null)
+                        analyzers.Add(new AnalyzerInfo(entryParsed.name, entryParsed.durationMs));
                 }
+
+                var totalMs = analyzers.Count > 0 ? analyzers.Sum(a => a.DurationMs) : parsed.durationMs;
+                target.Add(new AssemblyAnalyzerData(parsed.name, totalMs, analyzers));
             }
         }
-
-        SaveCurrentAssembly(currentSection, currentAssembly, currentAnalyzers);
 
         if (analyzerAssemblies.Count == 0 && generatorAssemblies.Count == 0)
             return null;
 
         return new CscAnalyzerData(analyzerAssemblies, generatorAssemblies);
-    }
-
-    private static void SaveCurrentAssembly(
-        List<AssemblyAnalyzerData>? section,
-        string? assemblyName,
-        List<AnalyzerInfo> analyzers)
-    {
-        if (section == null || assemblyName == null || analyzers.Count == 0)
-            return;
-
-        var totalMs = analyzers.Sum(a => a.DurationMs);
-        section.Add(new AssemblyAnalyzerData(assemblyName, totalMs, analyzers.ToList()));
     }
 
     private static void AggregateAssemblies(
@@ -155,21 +118,26 @@ public static class AnalyzerQuery
         }
     }
 
-    private static (string name, long durationMs) ParseLine(string line)
+    /// <summary>
+    /// Parses a timed line in the format: "0.012   59   Some.Analyzer.Name (CA1234)"
+    /// or "&lt;0.001   &lt;1   Some.Analyzer.Name".
+    /// </summary>
+    private static (string? name, long durationMs) ParseTimedLine(string? line)
     {
-        // Lines are formatted: "  <seconds>   <percentage>   <name>"
-        var columns = line.Split(["  "], StringSplitOptions.RemoveEmptyEntries);
+        if (string.IsNullOrWhiteSpace(line))
+            return (null, 0);
 
-        if (columns.Length >= 3)
-        {
-            if (double.TryParse(columns[0].Trim(), System.Globalization.NumberStyles.Float,
-                    System.Globalization.CultureInfo.InvariantCulture, out var seconds))
-            {
-                var name = columns[^1].Trim();
-                return (name, (long)(seconds * 1000));
-            }
-        }
+        // Split on runs of whitespace. Format: "<seconds>   <%>   <name...>"
+        var parts = line.Split((char[]?) null, StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length < 3)
+            return (null, 0);
 
-        return (line.Trim(), 0);
+        var secondsStr = parts[0].TrimStart('<');
+        if (!double.TryParse(secondsStr, NumberStyles.Float, CultureInfo.InvariantCulture, out var seconds))
+            return (null, 0);
+
+        // Name is everything after the first two columns (seconds + percentage).
+        var name = string.Join(" ", parts.Skip(2));
+        return (name, (long)(seconds * 1000));
     }
 }
