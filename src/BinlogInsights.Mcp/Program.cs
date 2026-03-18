@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using BinlogInsights.Mcp;
+using ModelContextProtocol.Protocol;
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -44,6 +45,39 @@ builder.Services.AddMcpServer(options =>
         """;
 })
 .WithStdioServerTransport()
+.WithRequestFilters(filters =>
+{
+    filters.AddCallToolFilter(next => async (context, request) =>
+    {
+        try
+        {
+            return await next(context, request);
+        }
+        catch (BinlogAnalysisException ex)
+        {
+            return new CallToolResult()
+            {
+                IsError = true,
+                Content = [new TextContentBlock()
+                {
+                    Text = $"{ex.Message}\nRecommended action: {ex.RecommendedAction}"
+                }]
+            };
+        }
+        catch (Exception ex)
+        {
+            return new CallToolResult()
+            {
+                IsError = true,
+                Content = [new TextContentBlock()
+                {
+                    Text = $"Unexpected error: {ex.Message}\nPlease check the binlog path and try again. " +
+                           "If the problem persists, the file may be corrupted — try rebuilding with 'dotnet build /bl'."
+                }]
+            };
+        }
+    });
+})
 // Diagnostics & investigation
 .WithTools<OverviewTool>()
 .WithTools<ErrorsTool>()
