@@ -5,9 +5,11 @@ namespace BinlogInsights.Mcp;
 internal static class DeploymentUtilities
 {
     /// <summary>
-    /// Returns the package version without hardcoding it.
-    /// The version is defined in Directory.Build.props and propagated to the assembly version at build time.
+    /// Returns the informational version set by Nerdbank.GitVersioning (e.g. "0.3.42-alpha+a1b2c3d").
     /// </summary>
     public static string GetVersion()
-        => Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "0.0.1";
+        => Assembly.GetExecutingAssembly()
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
+            ?? Assembly.GetExecutingAssembly().GetName().Version?.ToString(3)
+            ?? "0.0.0";
 }
