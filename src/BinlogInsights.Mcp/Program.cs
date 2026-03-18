@@ -80,34 +80,57 @@ builder.Services.AddMcpServer(options =>
 
 var app = builder.Build();
 
-// Pre-load binlog(s) specified via --binlog <path> so the first tool call returns instantly.
-var cache = app.Services.GetRequiredService<BinlogCache>();
-for (int i = 0; i < args.Length; i++)
+// Pre-load binlog specified via --binlog <path> so the first tool call returns instantly.
+switch (GetBinlogPathFromArgs(args))
 {
-    if (args[i] is "--binlog" or "-b")
-    {
-        if (i + 1 >= args.Length || args[i + 1].StartsWith('-'))
-        {
-            Console.Error.WriteLine($"Warning: '{args[i]}' flag requires a path argument. Skipping.");
-            continue;
-        }
-
-        var path = args[++i];
-        if (!File.Exists(path))
-        {
-            Console.Error.WriteLine($"Warning: Binlog file not found: '{path}'. Skipping preload.");
-            continue;
-        }
-
+    case BinlogArg.Specified(var binlogPath):
+        var cache = app.Services.GetRequiredService<BinlogCache>();
         try
         {
-            cache.Load(path);
+            if (!File.Exists(binlogPath))
+            {
+                Console.Error.WriteLine($"Error: Binlog file not found: '{binlogPath}'.");
+                break;
+            }
+            cache.Load(binlogPath);
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"Warning: Failed to preload binlog '{path}': {ex.Message}");
+            Console.Error.WriteLine($"Warning: Failed to preload binlog '{binlogPath}': {ex.Message}");
         }
-    }
+        break;
+
+    case BinlogArg.Error(var message):
+        Console.Error.WriteLine($"Error: {message}");
+        break;
 }
 
 await app.RunAsync();
+
+static BinlogArg GetBinlogPathFromArgs(string[] args)
+{
+    for (int i = 0; i < args.Length; i++)
+    {
+        if (args[i] is not ("--binlog" or "-b"))
+            continue;
+
+        if (i + 1 >= args.Length || args[i + 1].StartsWith('-'))
+            return new BinlogArg.Error("Please provide the path to the binlog. Usage: --binlog <path>");
+
+        return new BinlogArg.Specified(Path.GetFullPath(args[i + 1]));
+    }
+
+    return BinlogArg.NotSpecified.Instance;
+}
+
+abstract record BinlogArg
+{
+    public sealed record NotSpecified : BinlogArg
+    {
+        public static readonly NotSpecified Instance = new();
+    }
+
+    public sealed record Specified(string Path) : BinlogArg;
+
+    public sealed record Error(string Message) : BinlogArg;
+}
