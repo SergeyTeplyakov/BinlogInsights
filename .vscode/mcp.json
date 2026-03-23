@@ -3,6 +3,7 @@
     "binlog-insights": {
       "type": "stdio",
       "command": "binlog-insights-mcp",
+      "cwd": "${workspaceFolder}",
       "args": []
     }
   }

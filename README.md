@@ -81,6 +81,7 @@ Add the MCP server to your workspace. Create `.vscode/mcp.json`:
     "binlog-insights": {
       "type": "stdio",
       "command": "binlog-insights-mcp",
+      "cwd": "${workspaceFolder}",
       "args": []
     }
   }
@@ -95,6 +96,7 @@ You can pre-load one or more binlogs at startup so tool calls return instantly:
     "binlog-insights": {
       "type": "stdio",
       "command": "binlog-insights-mcp",
+      "cwd": "${workspaceFolder}",
       "args": ["--binlog", "build.binlog", "--binlog", "other.binlog"]
     }
   }
