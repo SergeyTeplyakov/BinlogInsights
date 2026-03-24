@@ -16,7 +16,7 @@ public class BinlogCache
     public Build Load(string binlogPath)
     {
         var fullPath = Path.GetFullPath(binlogPath);
-        var isRelative = !Path.IsPathRooted(binlogPath);
+        var isRelative = !Path.IsPathFullyQualified(binlogPath);
         var fileInfo = new FileInfo(fullPath);
 
         // Check existence before accessing file metadata.

@@ -92,7 +92,7 @@ public class BinlogCacheTests
     public void Load_RelativePathNotFound_ThrowsWithClearMessage()
     {
         var cache = new BinlogCache();
-        var relativePath = "nonexistent_build.binlog";
+        var relativePath = $"nonexistent_{Guid.NewGuid():N}.binlog";
 
         var ex = Assert.Throws<BinlogAnalysisException>(() => cache.Load(relativePath));
         Assert.Contains(relativePath, ex.Message);
