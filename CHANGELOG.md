@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.3.1
+
+### Bug fixes
+
+- **Improved relative binlog path error messages** (#10): When a relative path like `build.binlog` is passed and the file isn't found, the error now explains that it was resolved against the server's working directory and suggests using an absolute path or installing the Binlog Analyzer VS Code extension (which sets cwd automatically). Previously this produced a confusing `FileNotFoundException` against an unexpected directory.
+
 ## v0.3.0
 
 ### New features
