@@ -21,6 +21,13 @@ public class BinlogAnalysisException : Exception
             binlogPath,
             "Please verify the path or rebuild with 'dotnet build /bl' to generate a new binlog.");
 
+    public static BinlogAnalysisException RelativePathNotFound(string relativePath, string resolvedPath) =>
+        new($"Binlog file not found: '{relativePath}' (resolved to '{resolvedPath}').",
+            resolvedPath,
+            $"The relative path '{relativePath}' was resolved against the server's working directory. " +
+            "Either use an absolute path " +
+            "or install the Binlog Analyzer VS Code extension which automatically sets the working directory to your workspace.");
+
     public static BinlogAnalysisException FileDeleted(string binlogPath) =>
         new($"Binlog file was deleted or moved: '{binlogPath}'.",
             binlogPath,

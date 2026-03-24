@@ -16,6 +16,7 @@ public class BinlogCache
     public Build Load(string binlogPath)
     {
         var fullPath = Path.GetFullPath(binlogPath);
+        var isRelative = !Path.IsPathFullyQualified(binlogPath);
         var fileInfo = new FileInfo(fullPath);
 
         // Check existence before accessing file metadata.
@@ -24,7 +25,9 @@ public class BinlogCache
         if (!fileInfo.Exists)
         {
             _cache.TryRemove(fullPath, out _);
-            throw BinlogAnalysisException.FileNotFound(fullPath);
+            throw isRelative
+                ? BinlogAnalysisException.RelativePathNotFound(binlogPath, fullPath)
+                : BinlogAnalysisException.FileNotFound(fullPath);
         }
 
         try
