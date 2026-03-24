@@ -89,6 +89,19 @@ public class BinlogCacheTests
     }
 
     [Fact]
+    public void Load_RelativePathNotFound_ThrowsWithClearMessage()
+    {
+        var cache = new BinlogCache();
+        var relativePath = "nonexistent_build.binlog";
+
+        var ex = Assert.Throws<BinlogAnalysisException>(() => cache.Load(relativePath));
+        Assert.Contains(relativePath, ex.Message);
+        Assert.Contains("resolved to", ex.Message);
+        Assert.Contains("absolute path", ex.RecommendedAction);
+        Assert.Contains("Binlog Analyzer", ex.RecommendedAction);
+    }
+
+    [Fact]
     public void Load_FileDeletedThenRecreated_LoadsFreshBuild()
     {
         var cache = new BinlogCache();
