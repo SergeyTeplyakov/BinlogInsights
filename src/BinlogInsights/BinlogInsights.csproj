@@ -6,10 +6,9 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>binlog-insights</ToolCommandName>
     <PackageId>BinlogInsights</PackageId>
