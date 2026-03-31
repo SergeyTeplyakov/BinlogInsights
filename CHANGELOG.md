@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.0
+
+### Improvements
+
+- **Upgraded to .NET 10** and updated all dependencies to their latest versions.
+
 ## v0.3.1
 
 ### Bug fixes
