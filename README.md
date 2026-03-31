@@ -101,9 +101,6 @@ You can pre-load one or more binlogs at startup so tool calls return instantly:
 }
 ```
 
-> **Note:** Relative paths in `--binlog` args are resolved against the MCP server's working directory.
-> If files aren't found, use absolute paths or install the [Binlog Analyzer](https://marketplace.visualstudio.com/items?itemName=dotutils.binlog-analyzer) extension which sets the working directory automatically.
-
 Once configured, Copilot Chat automatically gains access to all 26 binlog analysis tools.
 
 ## Setting up your repo for the team

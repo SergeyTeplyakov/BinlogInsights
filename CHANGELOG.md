@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.4.0
+
+### Breaking changes
+
+- **Tools now require .NET 10**: The global `binlog-insights-mcp` tool targets `net10.0`, which means a .NET 10 runtime must be installed to run this version. Users on .NET 8/9 need to install .NET 10 or continue using v0.3.x.
+### Improvements
+
+- **Upgraded to .NET 10** and updated all dependencies to their latest versions.
+
 ## v0.3.1
 
 ### Bug fixes
