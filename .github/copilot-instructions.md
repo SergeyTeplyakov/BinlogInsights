@@ -16,13 +16,15 @@ The MCP server (`BinlogInsights.Mcp`) is designed to work in **two modes**:
 1. Install the global tool: `dotnet tool install -g BinlogInsights.Mcp`
 2. The `.vscode/mcp.json` in this repo configures the MCP server automatically.
 
-## Generating a binlog
+## Building
 
-If no `.binlog` file exists yet, build the project with binary logging enabled:
+Always produce a binary log when building so it is available for investigation:
 
 ```
-dotnet build /bl:build.binlog
+dotnet build /bl
 ```
+
+This writes `msbuild.binlog` in the current directory.
 
 ## Available MCP tools
 

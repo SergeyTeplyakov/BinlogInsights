@@ -29,13 +29,15 @@ the binlog-insights MCP tools to analyze `.binlog` files.
 - You need to understand why a build is slow
 - You need to compare two build configurations
 
-## Generating a binlog
+## Building
 
-If no `.binlog` file exists, rebuild with binary logging enabled:
+Always pass `/bl` when building so a binlog is available for investigation:
 
 ```
-dotnet build /bl:build.binlog
+dotnet build /bl
 ```
+
+This writes `msbuild.binlog` in the current directory.
 
 ## Error investigation
 
