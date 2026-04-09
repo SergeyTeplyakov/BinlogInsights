@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.5" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.4.0" />
     <PackageVersion Include="ModelContextProtocol" Version="1.2.0" />
     <PackageVersion Include="MSBuild.StructuredLogger" Version="2.3.154" />
