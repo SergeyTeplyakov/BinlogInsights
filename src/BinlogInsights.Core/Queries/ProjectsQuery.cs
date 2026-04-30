@@ -123,31 +123,15 @@ public static class ProjectsQuery
 
     /// <summary>
     /// Detects whether a project file is legacy (non-SDK) style from its XML content.
-    /// SDK-style projects use &lt;Project Sdk="..."&gt; or &lt;Sdk&gt; element.
     /// </summary>
     internal static bool IsLegacyProjectContent(string projectContent)
     {
         if (string.IsNullOrWhiteSpace(projectContent))
             return false;
 
-        var projectStart = projectContent.IndexOf("<Project", StringComparison.OrdinalIgnoreCase);
-        if (projectStart < 0)
-            return false;
-
-        var projectTagEnd = projectContent.IndexOf('>', projectStart);
-        if (projectTagEnd < 0)
-            return false;
-
-        var projectTag = projectContent[projectStart..projectTagEnd];
-        if (projectTag.Contains("Sdk=", StringComparison.OrdinalIgnoreCase))
-            return false;
-
-        // Check for <Sdk element (alternative SDK-style syntax)
-        if (projectContent.Contains("<Sdk ", StringComparison.OrdinalIgnoreCase) ||
-            projectContent.Contains("<Sdk>", StringComparison.OrdinalIgnoreCase))
-            return false;
-
-        return true;
+        return projectContent.Contains(
+            "<Project ToolsVersion=\"Current\" DefaultTargets=\"Build\"",
+            StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>
