@@ -99,10 +99,14 @@ public class ProjectsQueryTests
     }
 
     [Theory]
+    [InlineData("", false)]
+    [InlineData("   ", false)]
     [InlineData("<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup></PropertyGroup></Project>", false)]
-    [InlineData("<Project ToolsVersion=\"15.0\"><Import Project=\"$(MSBuildToolsPath)\\Microsoft.CSharp.targets\" /></Project>", true)]
     [InlineData("<Project><Sdk Name=\"Microsoft.NET.Sdk\" /><PropertyGroup></PropertyGroup></Project>", false)]
-    [InlineData("<Project ToolsVersion=\"14.0\" DefaultTargets=\"Build\"><PropertyGroup><TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion></PropertyGroup></Project>", true)]
+    [InlineData("<Project ToolsVersion=\"Current\"><PropertyGroup></PropertyGroup></Project>", false)]
+    [InlineData("<Project ToolsVersion=\"14.0\" DefaultTargets=\"Build\"><PropertyGroup></PropertyGroup></Project>", false)]
+    [InlineData("<Project ToolsVersion=\"Current\" DefaultTargets=\"Build\"><PropertyGroup></PropertyGroup></Project>", true)]
+    [InlineData("<Project ToolsVersion=\"Current\" DefaultTargets=\"Build\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\"></Project>", true)]
     public void IsLegacyProjectContent_DetectsCorrectly(string content, bool expectedLegacy)
     {
         var result = ProjectsQuery.IsLegacyProjectContent(content);
