@@ -97,20 +97,40 @@ public static class ProjectsQuery
                 csprojPaths.Add(file);
         });
 
+        // Build a lookup of evaluations by project path so legacy detection
+        // can read the UsingMicrosoftNETSdk property without rescanning the tree
+        // for every project.
+        var evaluationsByPath = new Dictionary<string, ProjectEvaluation>(StringComparer.OrdinalIgnoreCase);
+        build.VisitAllChildren<ProjectEvaluation>(eval =>
+        {
+            if (!string.IsNullOrEmpty(eval.ProjectFile) &&
+                !evaluationsByPath.ContainsKey(eval.ProjectFile))
+            {
+                evaluationsByPath[eval.ProjectFile] = eval;
+            }
+        });
+
         // Build results with legacy detection
         var results = new List<ProjectFileInfo>();
         foreach (var path in csprojPaths)
         {
             bool isLegacy;
-            if (sourceContent.TryGetValue(path, out var content))
+            if (evaluationsByPath.TryGetValue(path, out var eval))
             {
-                // We have the actual file content — check it directly
+                // Primary: check the UsingMicrosoftNETSdk MSBuild property.
+                // SDK-style projects set this to "true"; legacy projects do not.
+                isLegacy = IsLegacyFromEvaluation(eval);
+            }
+            else if (sourceContent.TryGetValue(path, out var content))
+            {
+                // Fallback: project was referenced but never evaluated
+                // (e.g. build failed before evaluation). Inspect embedded XML.
                 isLegacy = IsLegacyProjectContent(content);
             }
             else
             {
-                // No embedded content — try to detect from evaluation imports
-                isLegacy = IsLegacyFromEvaluation(build, path);
+                // No evaluation and no embedded content — can't determine.
+                isLegacy = false;
             }
 
             results.Add(new ProjectFileInfo(path, isLegacy));
@@ -135,56 +155,53 @@ public static class ProjectsQuery
     }
 
     /// <summary>
-    /// Heuristic: detect legacy projects from their evaluation import tree.
-    /// Legacy projects import Microsoft.CSharp.targets directly rather than through SDK resolution.
-    /// SDK-style projects import via Sdk.props/Sdk.targets from an SDK path.
+    /// Detects whether a project is legacy (non-SDK) style by inspecting the
+    /// UsingMicrosoftNETSdk MSBuild property in its evaluation. SDK-style
+    /// projects (Microsoft.NET.Sdk and derivatives such as Microsoft.Build.NoTargets,
+    /// Microsoft.Build.Traversal) set this property to "true" during evaluation.
+    /// Legacy projects do not set it at all.
     /// </summary>
-    internal static bool IsLegacyFromEvaluation(Build build, string projectPath)
+    internal static bool IsLegacyFromEvaluation(ProjectEvaluation evaluation)
     {
-        ProjectEvaluation? evaluation = null;
-        build.VisitAllChildren<ProjectEvaluation>(eval =>
+        var value = GetEvaluationPropertyValue(evaluation, "UsingMicrosoftNETSdk");
+        return !string.Equals(value, "true", StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// Reads a property value from the "Properties" folder of a ProjectEvaluation.
+    /// The Properties folder may contain Property nodes directly or grouped under
+    /// sub-folders (e.g. "Global"); both layouts are searched.
+    /// </summary>
+    private static string? GetEvaluationPropertyValue(ProjectEvaluation evaluation, string propertyName)
+    {
+        var propertiesFolder = evaluation.Children
+            .OfType<Folder>()
+            .FirstOrDefault(f => f.Name == "Properties");
+
+        if (propertiesFolder == null)
+            return null;
+
+        return FindPropertyValue(propertiesFolder, propertyName);
+    }
+
+    private static string? FindPropertyValue(TreeNode node, string propertyName)
+    {
+        foreach (var child in node.Children)
         {
-            if (evaluation != null) return;
-            if (string.Equals(eval.ProjectFile, projectPath, StringComparison.OrdinalIgnoreCase))
-                evaluation = eval;
-        });
-
-        if (evaluation == null)
-            return false;
-
-        // Walk the import tree looking for SDK-style markers
-        bool hasSdkImport = false;
-        bool hasLegacyCSharpTargets = false;
-
-        evaluation.VisitAllChildren<Import>(import =>
-        {
-            var importedFile = import.ImportedProjectFilePath ?? import.Text ?? "";
-
-            // SDK-style: imports come from Sdk directories
-            if (importedFile.Contains("Sdk.props", StringComparison.OrdinalIgnoreCase) ||
-                importedFile.Contains("Sdk.targets", StringComparison.OrdinalIgnoreCase))
+            if (child is Property prop &&
+                string.Equals(prop.Name, propertyName, StringComparison.OrdinalIgnoreCase))
             {
-                // But only if it's a real SDK (like Microsoft.NET.Sdk), not just any file with Sdk in the name
-                if (importedFile.Contains("Microsoft.NET.Sdk", StringComparison.OrdinalIgnoreCase) ||
-                    importedFile.Contains("Microsoft.Build.NoTargets", StringComparison.OrdinalIgnoreCase) ||
-                    importedFile.Contains("Microsoft.Build.Traversal", StringComparison.OrdinalIgnoreCase))
-                    hasSdkImport = true;
+                return prop.Value;
             }
 
-            // Legacy marker: direct import of Microsoft.CSharp.targets (not through SDK)
-            if (importedFile.EndsWith("Microsoft.CSharp.targets", StringComparison.OrdinalIgnoreCase))
-                hasLegacyCSharpTargets = true;
-        });
+            if (child is Folder folder)
+            {
+                var nested = FindPropertyValue(folder, propertyName);
+                if (nested != null)
+                    return nested;
+            }
+        }
 
-        // If we found SDK imports, it's SDK-style
-        if (hasSdkImport)
-            return false;
-
-        // If we found legacy CSharp targets without SDK, it's legacy
-        if (hasLegacyCSharpTargets)
-            return true;
-
-        // Default: can't determine, assume not legacy
-        return false;
+        return null;
     }
 }
