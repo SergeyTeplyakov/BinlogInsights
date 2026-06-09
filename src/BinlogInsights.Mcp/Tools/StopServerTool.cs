@@ -15,16 +15,8 @@ public class StopServerTool
     [Description("Stops only this MCP server instance (for upgrades or local iteration).")]
     public static string Execute()
     {
-        // Graceful self-shutdown: request host stop first, hard-exit only if host lifetime is unavailable.
-        Task.Run(() =>
-        {
-            Thread.Sleep(100);
-            if (!HostLifetimeBridge.TryStop())
-            {
-                Environment.Exit(0);
-            }
-        });
-
+        // Graceful self-shutdown: schedule the stop so the response is flushed to the client first.
+        _ = ShutdownHelper.ShutdownAfterDelayAsync();
         return "Stopping this MCP server instance.";
     }
 }

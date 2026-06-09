@@ -46,14 +46,8 @@ public class StopInstanceTool
     {
         if (pid == ProcessDiscovery.CurrentPid)
         {
-            Task.Run(() =>
-            {
-                Thread.Sleep(100);
-                if (!HostLifetimeBridge.TryStop())
-                {
-                    Environment.Exit(0);
-                }
-            });
+            // Graceful self-shutdown: schedule the stop so the response is flushed to the client first.
+            _ = ShutdownHelper.ShutdownAfterDelayAsync();
             return $"Stopping current instance (PID {pid}).";
         }
 
