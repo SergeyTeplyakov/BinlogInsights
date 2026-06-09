@@ -4,7 +4,8 @@
 
 $ErrorActionPreference = 'Stop'
 
-$dll = (Resolve-Path "src/BinlogInsights.Mcp/bin/Debug/net10.0/BinlogInsights.Mcp.dll").Path
+$repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "../..")).Path
+$dll = (Resolve-Path (Join-Path $repoRoot "src/BinlogInsights.Mcp/bin/Debug/net10.0/BinlogInsights.Mcp.dll")).Path
 Write-Host "Using DLL: $dll"
 
 function Start-McpInstance {
