@@ -57,24 +57,39 @@ Paging: results are computed up to offset + limit, then sliced. A trailing '+' o
         var build = cache.Load(binlog_file);
         var index = SearchState.For(build).Index;
 
+        // Probe one extra result (capped at MaxAllowedResults) so we can tell
+        // whether more matches exist beyond the page without an ambiguous
+        // boundary case. long math avoids overflow on large user-supplied offset.
+        long requested = (long)skip + take + 1;
+        int cap = (int)Math.Min(requested, MaxAllowedResults);
+
         // SearchIndex.FindNodes is not thread-safe (mutates typeKeyword,
-        // bit vector). Serialize calls per index.
+        // bit vector). Serialize calls per index and restore MaxResults.
         IReadOnlyList<SearchResult> results;
         lock (index)
         {
-            index.MaxResults = skip + take;
-            results = index.FindNodes(query, CancellationToken.None).ToArray();
+            int saved = index.MaxResults;
+            try
+            {
+                index.MaxResults = cap;
+                results = index.FindNodes(query, CancellationToken.None).ToArray();
+            }
+            finally
+            {
+                index.MaxResults = saved;
+            }
         }
 
-        int total = results.Count;
+        int matched = results.Count;
+        bool more = matched > skip + take;
         var page = results.Skip(skip).Take(take).ToArray();
 
         var sb = new StringBuilder();
-        sb.Append(total).Append(total == 1 ? " result" : " results");
+        sb.Append(matched).Append(matched == 1 ? " result" : " results");
         sb.Append(" (skip=").Append(skip)
           .Append(", take=").Append(take)
-          .Append(", matched=").Append(total);
-        if (total >= skip + take)
+          .Append(", matched=").Append(matched);
+        if (more)
         {
             sb.Append('+');
         }
@@ -317,13 +332,11 @@ name_contains: raw search text matched against the child's name/text fields with
             filterDescription = query;
         }
 
-        IEnumerable<BaseNode> source = tree.Children;
-        if (matcher is not null)
-        {
-            source = source.Where(c => matcher.IsMatch(c) is not null);
-        }
-
-        var filtered = source.ToList();
+        // Avoid copying the entire children collection in the common (unfiltered)
+        // case; only materialize a new list when a matcher actually filters.
+        IList<BaseNode> filtered = matcher is null
+            ? tree.Children
+            : tree.Children.Where(c => matcher.IsMatch(c) is not null).ToList();
         int total = filtered.Count;
 
         var sb = new StringBuilder();
@@ -344,7 +357,8 @@ name_contains: raw search text matched against the child's name/text fields with
 
         sb.AppendLine(")");
 
-        int end = Math.Min(total, skip + take);
+        // long math avoids overflow when offset is large user input.
+        int end = (int)Math.Min(total, (long)skip + take);
         for (int i = skip; i < end; i++)
         {
             sb.AppendLine(NodeFormatter.FormatNode(filtered[i]));

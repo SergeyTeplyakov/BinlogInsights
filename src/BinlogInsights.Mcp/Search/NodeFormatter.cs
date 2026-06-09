@@ -30,7 +30,7 @@ internal static class NodeFormatter
         {
             var nv = (NameValueNode)node;
             string value = TextUtilities.ShortenValue(nv.Value ?? string.Empty, "...", maxChars: MaxSummaryChars);
-            return $"{nv.Name}={value} [{id}]";
+            return $"{nv.Name ?? string.Empty}={value} [{id}]";
         }
 
         // FileCopy results carry a Kind that the viewer renders as a colored icon
