@@ -117,9 +117,14 @@ builder.Services.AddMcpServer(options =>
 .WithTools<ExpensiveAnalyzersTool>()
 // Embedded files
 .WithTools<ListFilesTool>()
-.WithTools<GetFileTool>();
+.WithTools<GetFileTool>()
+// Server control
+.WithTools<ListMcpInstancesTool>()
+.WithTools<StopInstanceTool>()
+.WithTools<StopServerTool>();
 
 var app = builder.Build();
+HostLifetimeBridge.Initialize(app.Services.GetRequiredService<IHostApplicationLifetime>());
 
 // Pre-load binlogs specified via --binlog <path> so tool calls return instantly.
 switch (GetBinlogArgs(args))
