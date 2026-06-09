@@ -43,4 +43,10 @@ v0.2.0:
     <Reference Include="System.Management" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Search\SearchSyntax.md">
+      <LogicalName>SearchSyntax.md</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="MSBuild.StructuredLogger" />
+    <PackageReference Include="MSBuild.StructuredLogger.Utils" />
   </ItemGroup>
 
 </Project>
