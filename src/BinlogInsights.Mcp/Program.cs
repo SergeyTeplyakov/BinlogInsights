@@ -99,6 +99,10 @@ builder.Services.AddMcpServer(options =>
 .WithTools<ProjectsTool>()
 .WithTools<PreprocessTool>()
 .WithTools<CompareTool>()
+// Viewer-syntax query & tree navigation
+.WithTools<QueryTool>()
+.WithTools<NavigationTool>()
+.WithTools<SearchSyntaxHelpTool>()
 // Performance analysis
 .WithTools<ExpensiveTargetsTool>()
 .WithTools<SearchTargetsTool>()
