@@ -125,7 +125,8 @@ builder.Services.AddMcpServer(options =>
 // Server control
 .WithTools<ListMcpInstancesTool>()
 .WithTools<StopInstanceTool>()
-.WithTools<StopServerTool>();
+.WithTools<StopServerTool>()
+.WithTools<SelfUpdateTool>();
 
 var app = builder.Build();
 HostLifetimeBridge.Initialize(app.Services.GetRequiredService<IHostApplicationLifetime>());
